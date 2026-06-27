@@ -1,5 +1,6 @@
 package lunarmonhorizons;
 
+import lunarmonhorizons.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,6 @@ public class LunarMonHorizons implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		ModItems.registerModItems();
 	}
 }
