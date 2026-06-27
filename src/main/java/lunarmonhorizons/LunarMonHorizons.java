@@ -1,5 +1,6 @@
 package lunarmonhorizons;
 
+import lunarmonhorizons.item.ModItemGroups;
 import lunarmonhorizons.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -14,6 +15,7 @@ public class LunarMonHorizons implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
 	}
 }

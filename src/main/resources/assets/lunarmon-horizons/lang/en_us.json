@@ -1,5 +1,7 @@
 {
   "item.lunarmon-horizons.sky_fragment": "Sky Fragment",
-  "item.lunarmon-horizons.ice_feather": "Ice Feather"
+  "item.lunarmon-horizons.ice_feather": "Ice Feather",
+
+  "itemGroup.lunarmon-horizons.horizons_items": "Horizons Items"
 
 }
