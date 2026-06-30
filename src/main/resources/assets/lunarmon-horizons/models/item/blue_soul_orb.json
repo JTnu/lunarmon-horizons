@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lunarmon-horizons:item/blue_soul_orb"
+  }
+}
