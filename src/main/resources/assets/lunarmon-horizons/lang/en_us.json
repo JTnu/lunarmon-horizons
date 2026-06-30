@@ -1,7 +1,97 @@
 {
+  "block.lunarmon-horizons.pedestal_base": "Pedestal Base",
+  "block.lunarmon-horizons.rayquaza_pedestal": "Rayquaza Pedestal",
+
   "item.lunarmon-horizons.sky_fragment": "Sky Fragment",
   "item.lunarmon-horizons.ice_feather": "Ice Feather",
 
-  "itemGroup.lunarmon-horizons.horizons_items": "Horizons Items"
+  "item.lunarmon-horizons.pure_heart": "Pure Heart",
+  "item.lunarmon-horizons.flame_feather": "Flame Feather",
+  "item.lunarmon-horizons.charged_feather": "Charged Feather",
+  "item.lunarmon-horizons.rainbow_feather": "Rainbow Feather",
 
+  "item.lunarmon-horizons.genetic_core": "Genetic Core",
+  "item.lunarmon-horizons.dream_catcher": "Dream Catcher",
+
+  "item.lunarmon-horizons.red_soul_orb": "Red Soul Orb",
+  "item.lunarmon-horizons.blue_soul_orb": "Blue Soul Orb",
+
+  "item.lunarmon-horizons.pure_water": "Pure Water",
+  "item.lunarmon-horizons.ocean_heart": "Ocean Heart",
+  "item.lunarmon-horizons.magma_heart": "Magma Heart",
+
+  "item.lunarmon-horizons.magma_keystone": "Magma Keystone",
+
+  "item.lunarmon-horizons.ideals_crystal": "Ideals Crystal",
+  "item.lunarmon-horizons.truth_crystal": "Truth Crystal",
+
+  "item.lunarmon-horizons.frozen_tablet": "Frozen Tablet",
+  "item.lunarmon-horizons.stone_tablet": "Stone Tablet",
+  "item.lunarmon-horizons.metal_tablet": "Metal Tablet",
+
+  "item.lunarmon-horizons.prison_bottle_fragment": "Prison Bottle Fragment",
+  "item.lunarmon-horizons.prison_bottle": "Prison Bottle",
+
+  "item.lunarmon-horizons.sacred_leaf": "Sacred Leaf",
+  "item.lunarmon-horizons.steam_core": "Steam Core",
+
+  "item.lunarmon-horizons.heros_crest": "Hero's Crest",
+  "item.lunarmon-horizons.guardians_crest": "Guardian's Crest",
+
+  "item.lunarmon-horizons.silver_conch": "Silver Conch",
+
+  "item.lunarmon-horizons.steel_sigil": "Steel Sigil",
+
+  "item.lunarmon-horizons.obsidian_shard": "Obsidian Shard",
+  "item.lunarmon-horizons.world_sapling": "World Sapling",
+
+  "itemGroup.lunarmon-horizons.horizons_items": "Horizons Items",
+  "itemGroup.lunarmon-horizons.horizons_blocks": "Horizons Blocks",
+
+  "tooltip.lunarmon-horizons.pedestal_base": "A base designed to hold valuable artifacts",
+  "tooltip.lunarmon-horizons.rayquaza_pedestal": "A pedestal attuned to §2§lRayquaza's§r power.",
+
+  "tooltip.lunarmonhorizons.sky_fragment.shift": "Used to Summon §2§lRayquaza§r",
+  "tooltip.lunarmonhorizons.pure_heart.shift": "Used to summon §d§lMew§r",
+  "tooltip.lunarmonhorizons.flame_feather.shift": "Used to summon §6§lMoltres§r",
+  "tooltip.lunarmonhorizons.charged_feather.shift": "Used to summon §e§lZapdos§r",
+  "tooltip.lunarmonhorizons.rainbow_feather.shift": "Used to summon §6§lHo-Oh§r",
+  "tooltip.lunarmonhorizons.ice_feather.shift": "Used to summon §b§lArticuno§r",
+
+  "tooltip.lunarmonhorizons.genetic_core.shift": "Used to summon §5§lMewtwo§r",
+  "tooltip.lunarmonhorizons.dream_catcher.shift": "Used to summon §d§lCresselia§r",
+
+  "tooltip.lunarmonhorizons.red_soul_orb.shift": "Used to summon §d§lLatias§r",
+  "tooltip.lunarmonhorizons.blue_soul_orb.shift": "Used to summon §9§lLatios§r",
+
+  "tooltip.lunarmonhorizons.pure_water.shift": "Used to summon §b§lSuicune§r",
+  "tooltip.lunarmonhorizons.ocean_heart.shift": "Used to summon §9§lKyogre§r",
+  "tooltip.lunarmonhorizons.magma_heart.shift": "Used to summon §c§lGroudon§r",
+
+  "tooltip.lunarmonhorizons.magma_keystone.shift": "Used to summon §6§lHeatran§r",
+
+  "tooltip.lunarmonhorizons.ideals_crystal.shift": "Used to summon §0§lZekrom§r",
+  "tooltip.lunarmonhorizons.truth_crystal.shift": "Used to summon §c§lReshiram§r",
+
+  "tooltip.lunarmonhorizons.frozen_tablet.shift": "Used to summon §b§lRegice§r",
+  "tooltip.lunarmonhorizons.stone_tablet.shift": "Used to summon §7§lRegirock§r",
+  "tooltip.lunarmonhorizons.metal_tablet.shift": "Used to summon §8§lRegisteel§r",
+
+  "tooltip.lunarmonhorizons.prison_bottle_fragment.shift": "A mysterious fragment of an ancient prison bottle",
+  "tooltip.lunarmonhorizons.prison_bottle.shift": "Used to summon §5§lHoopa§r",
+
+  "tooltip.lunarmonhorizons.sacred_leaf.shift": "Used to summon §a§lVirizion§r",
+  "tooltip.lunarmonhorizons.steam_core.shift": "Used to summon §6§lVolcanion§r",
+
+  "tooltip.lunarmonhorizons.heros_crest.shift": "Used to summon §6§lZacian§r",
+  "tooltip.lunarmonhorizons.guardians_crest.shift": "Used to summon §1§lZamazenta§r",
+
+  "tooltip.lunarmonhorizons.silver_conch.shift": "A mystical conch that plays a §b§llegendary tone§r when blown",
+
+  "tooltip.lunarmonhorizons.steel_sigil.shift": "Used to summon §7§lCobalion§r",
+
+  "tooltip.lunarmonhorizons.obsidian_shard.shift": "Used to summon §8§lYveltal§r",
+  "tooltip.lunarmonhorizons.world_sapling.shift": "Used to summon §a§lXerneas§r",
+
+  "tooltip.lunarmonhorizons.hold_shift": "§7Hold §lShift§r §7for more info"
 }
