@@ -2,11 +2,7 @@ package lunarmonhorizons.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class RayquazaPedestalBlock extends PedestalBlock {
 
@@ -18,7 +14,7 @@ public class RayquazaPedestalBlock extends PedestalBlock {
     }
 
     @Override
-    protected MapCodec<? extends PedestalBlock> codec() {
+    protected @NotNull MapCodec<? extends PedestalBlock> codec() {
         return CODEC;
     }
 
