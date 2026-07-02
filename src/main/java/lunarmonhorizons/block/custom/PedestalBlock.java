@@ -1,8 +1,8 @@
 package lunarmonhorizons.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import lunarmonhorizons.block.entity.PedestalType;
 import lunarmonhorizons.block.entity.custom.PedestalBlockEntity;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -10,9 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -25,9 +23,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class PedestalBlock extends BaseEntityBlock {
 
@@ -46,16 +41,19 @@ public class PedestalBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state,
-                                           BlockGetter level,
-                                           BlockPos pos,
-                                           CollisionContext context) {
-        return SHAPE;
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+
+        PedestalBlockEntity be = new PedestalBlockEntity(pos, state);
+
+        be.setPedestalType(PedestalType.DEFAULT);
+
+        return be;
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PedestalBlockEntity(pos, state);
+    protected @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos,
+                                           CollisionContext context) {
+        return SHAPE;
     }
 
     @Override
@@ -64,26 +62,16 @@ public class PedestalBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,
-                            boolean movedByPiston) {
-
-        if (!state.is(newState.getBlock())) {
-            BlockEntity be = level.getBlockEntity(pos);
-
-            if (be instanceof PedestalBlockEntity pedestal) {
-                Block.popResource(level, pos, pedestal.getItem(0));
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
-
-            super.onRemove(state, level, pos, newState, movedByPiston);
-        }
-    }
-
-    @Override
     protected @NotNull InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
                                                         BlockHitResult hit) {
 
-        if (!(level.getBlockEntity(pos) instanceof PedestalBlockEntity pedestal)) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (!(be instanceof PedestalBlockEntity pedestal)) {
             return InteractionResult.PASS;
         }
 
@@ -91,55 +79,38 @@ public class PedestalBlock extends BaseEntityBlock {
 
         if (pedestal.isEmpty() && !held.isEmpty()) {
 
-            pedestal.setItem(0, held.copyWithCount(1));
-            held.shrink(1);
-
-            level.playSound(
-                    null,
-                    pos,
-                    SoundEvents.ITEM_PICKUP,
-                    SoundSource.BLOCKS,
-                    1.0F,
-                    2.0F
-            );
-
-            level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
-
-            return InteractionResult.SUCCESS;
+            if (pedestal.tryInsert(held.copyWithCount(1))) {
+                held.shrink(1);
+                playSound(level, pos);
+                return InteractionResult.CONSUME;
+            }
         }
 
-        if (held.isEmpty() && !player.isShiftKeyDown()) {
+        if (!pedestal.isEmpty() && held.isEmpty() && !player.isShiftKeyDown()) {
 
-            ItemStack extracted = pedestal.getItem(0);
+            ItemStack extracted = pedestal.extract();
 
-            player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
-            pedestal.clearContent();
-
-            level.playSound(
-                    null,
-                    pos,
-                    SoundEvents.ITEM_PICKUP,
-                    SoundSource.BLOCKS,
-                    1.0F,
-                    1.0F
-            );
-
-            level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
-
-            return InteractionResult.SUCCESS;
+            if (!extracted.isEmpty()) {
+                player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
+                playSound(level, pos);
+                return InteractionResult.CONSUME;
+            }
         }
 
         return InteractionResult.PASS;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    private void playSound(Level level, BlockPos pos) {
+        level.playSound(
+                null,
+                pos,
+                SoundEvents.ITEM_PICKUP,
+                SoundSource.BLOCKS,
+                1.0F,
+                1.0F
+        );
 
-        if (Screen.hasShiftDown()) {
-            tooltip.add(getTooltip());
-        } else {
-            tooltip.add(Component.translatable("tooltip.lunarmonhorizons.hold_shift"));
-        }
+        level.sendBlockUpdated(pos, level.getBlockState(pos), level.getBlockState(pos), Block.UPDATE_ALL);
     }
 
     protected Component getTooltip() {

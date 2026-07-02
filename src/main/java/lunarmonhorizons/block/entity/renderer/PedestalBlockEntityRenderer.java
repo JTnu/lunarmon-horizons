@@ -24,7 +24,7 @@ public class PedestalBlockEntityRenderer implements BlockEntityRenderer<Pedestal
     public void render(PedestalBlockEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
 
-        ItemStack stack = entity.getItem(0);
+        ItemStack stack = entity.getItem();
         if (stack.isEmpty()) return;
 
         Level level = entity.getLevel();
