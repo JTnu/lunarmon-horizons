@@ -66,6 +66,7 @@ public class ModItemGroups {
             .displayItems((params, output) -> {
                 output.accept(ModBlocks.PEDESTAL_BASE);
                 output.accept(ModBlocks.RAYQUAZA_PEDESTAL);
+                output.accept(ModBlocks.SPAWNING_ANCHOR);
             })
             .build();
 
