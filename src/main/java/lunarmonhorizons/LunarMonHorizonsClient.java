@@ -1,7 +1,7 @@
 package lunarmonhorizons;
 
-import lunarmonhorizons.block.entity.ModBlockEntities;
-import lunarmonhorizons.block.entity.renderer.PedestalBlockEntityRenderer;
+import lunarmonhorizons.block.entities.ModBlockEntities;
+import lunarmonhorizons.block.entities.renderer.PedestalBlockEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 

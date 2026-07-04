@@ -1,7 +1,7 @@
 package lunarmonhorizons;
 
 import lunarmonhorizons.block.ModBlocks;
-import lunarmonhorizons.block.entity.ModBlockEntities;
+import lunarmonhorizons.block.entities.ModBlockEntities;
 import lunarmonhorizons.item.ModItemGroups;
 import lunarmonhorizons.item.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -18,7 +18,7 @@ public class LunarMonHorizons implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static GameRules.Key<GameRules.BooleanValue> SCAN_ANCHORS = GameRuleRegistry
-			.register("scan_anchors", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(false));
+			.register("scanAnchors", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(false));
 
 	/**
 	 * Helper method to create Mod's ids
