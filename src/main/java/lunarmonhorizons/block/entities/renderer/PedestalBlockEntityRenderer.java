@@ -1,6 +1,6 @@
-package lunarmonhorizons.block.entity.renderer;
+package lunarmonhorizons.block.entities.renderer;
 
-import lunarmonhorizons.block.entity.custom.PedestalBlockEntity;
+import lunarmonhorizons.block.entities.pedestals.AbstractPedestalBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -15,13 +15,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
-public class PedestalBlockEntityRenderer implements BlockEntityRenderer<PedestalBlockEntity> {
+public class PedestalBlockEntityRenderer implements BlockEntityRenderer<AbstractPedestalBlockEntity> {
 
-    public PedestalBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-    }
+    public PedestalBlockEntityRenderer(BlockEntityRendererProvider.Context context) { }
 
     @Override
-    public void render(PedestalBlockEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
+    public void render(AbstractPedestalBlockEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
 
         ItemStack stack = entity.getItem();
