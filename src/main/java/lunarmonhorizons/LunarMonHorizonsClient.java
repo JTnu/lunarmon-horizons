@@ -14,5 +14,10 @@ public class LunarMonHorizonsClient implements ClientModInitializer {
                 PedestalBlockEntityRenderer::new
         );
 
+        BlockEntityRenderers.register(
+                ModBlockEntities.SPAWNING_PEDESTAL_BE,
+                PedestalBlockEntityRenderer::new
+        );
+
     }
 }
