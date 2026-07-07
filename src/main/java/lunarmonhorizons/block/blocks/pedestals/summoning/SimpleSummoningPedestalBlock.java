@@ -60,4 +60,9 @@ public class SimpleSummoningPedestalBlock extends PredicatedPedestalBlock implem
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
         return createTickerHelper(blockEntityType, ModBlockEntities.SPAWNING_PEDESTAL_BE, SimpleSummoningPedestalBlockEntity::serverTick);
     }
+
+    @Override
+    protected boolean dropsInventoryOnBreak() {
+        return false;
+    }
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class AbstractPedestalBlockEntity extends BlockEntity { // Check BaseContainerBlockEntity
+public abstract class AbstractPedestalBlockEntity extends BlockEntity {
 
     private final SimpleContainer inventory = new SimpleContainer(1);
 
@@ -23,38 +23,40 @@ public abstract class AbstractPedestalBlockEntity extends BlockEntity { // Check
         super(type, pos, state);
     }
 
-    // Executes when the hand stack is not empty
-    // TODO: Swapping mechanic
-    public ItemStack tryInsert(ItemStack stack, ServerPlayer player) {
+    public PedestalInsertResult tryInsert(ItemStack stack, ServerPlayer player) {
 
-        if (!isItemValid(stack, player)) return stack;
-
-        ItemStack old = inventory.getItem(0).copy();
-        if (ItemStack.isSameItemSameComponents(old, stack)) return stack;
-
-        ItemStack newStack =  stack.copyWithCount(1);
-
-        boolean canSwap = !old.isEmpty() && stack.getCount() == 1 && canSwap(old, stack, player);
-
-        if (old.isEmpty() || canSwap) { // If empty will set as usual, swaps if the item is exactly 1 count
-            stack.shrink(1);
-            inventory.setItem(0, newStack);
-            setChanged();
-            sync();
-            onItemChanged(old.copy(), stack, canSwap ? State.SWAPPED : State.INSERTED);
-            if (canSwap) return old; // Returns the item from the pedestal
+        if (!isItemValid(stack, player)) {
+            return new PedestalInsertResult(stack, ItemStack.EMPTY, false);
         }
 
-        return stack; // Returns the item as the same or removed a count
+        ItemStack old = inventory.getItem(0).copy();
+
+        if (ItemStack.isSameItemSameComponents(old, stack)) {
+            return new PedestalInsertResult(stack, ItemStack.EMPTY, false);
+        }
+
+        ItemStack pedestalStack = stack.copyWithCount(1);
+
+        boolean swap = !old.isEmpty() && canSwap(old, stack, player);
+
+        if (old.isEmpty() || swap) {
+            ItemStack remainingHand = stack.copy();
+            remainingHand.shrink(1);
+            inventory.setItem(0, pedestalStack);
+            setChanged();
+            sync();
+            onItemChanged(old, pedestalStack, swap ? State.SWAPPED : State.INSERTED);
+            return new PedestalInsertResult(remainingHand, swap ? old : ItemStack.EMPTY, true);
+        }
+
+        return new PedestalInsertResult(stack, ItemStack.EMPTY, false);
     }
 
-    // Executes when the hand stack is empty
     public ItemStack extract(ServerPlayer player) {
         ItemStack old = inventory.getItem(0).copy();
 
         if (isEmpty() || !canTakeItem(old, player)) return ItemStack.EMPTY;
 
-        ItemStack result = inventory.getItem(0);
         inventory.setItem(0, ItemStack.EMPTY);
 
         setChanged();
@@ -62,7 +64,7 @@ public abstract class AbstractPedestalBlockEntity extends BlockEntity { // Check
 
         onItemChanged(old, ItemStack.EMPTY, State.EXTRACTED);
 
-        return result;
+        return old;
     }
 
     public boolean isEmpty() {
@@ -125,7 +127,13 @@ public abstract class AbstractPedestalBlockEntity extends BlockEntity { // Check
     public enum State {
         INSERTED,
         EXTRACTED,
-        SWAPPED;
+        SWAPPED
     }
 
+    public record PedestalInsertResult(
+            ItemStack remainingHand,
+            ItemStack returnedItem,
+            boolean changed
+    ) {
+    }
 }

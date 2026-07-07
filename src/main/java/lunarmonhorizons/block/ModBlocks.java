@@ -27,9 +27,8 @@ public class ModBlocks {
     public static final Block PEDESTAL_BASE = registerBlock(
             "pedestal_base",
             new BasicPedestalBlock(BlockBehaviour.Properties.of().noOcclusion()
-                    .strength(-1.0F, 3600000.0F)
-                    .noLootTable()
-                    .isValidSpawn(Blocks::never)
+                    .strength(2.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
             )
     );
 
@@ -66,7 +65,6 @@ public class ModBlocks {
         return (SimpleSummoningPedestalBlock) registerBlock(pedestalName, new SimpleSummoningPedestalBlock(
                 BlockBehaviour.Properties.of()
                         .strength(-1.0F, 3600000.0F)
-                        .noLootTable()
                         .isValidSpawn(Blocks::never),
                 requiredItem,
                 summoning

@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractPedestalBlock extends BaseEntityBlock {
 
@@ -65,12 +67,19 @@ public abstract class AbstractPedestalBlock extends BaseEntityBlock {
         ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
 
         if (!held.isEmpty()) {
-            ItemStack copyHeld = held.copy();
-            ItemStack toSet = pedestal.tryInsert(held, (ServerPlayer) player);
-            if (!ItemStack.isSameItemSameComponents(toSet, copyHeld)) { // If the resulted item got changed
+            AbstractPedestalBlockEntity.PedestalInsertResult result = pedestal.tryInsert(held, (ServerPlayer) player);
+
+            if (result.changed()) {
+                player.setItemInHand(InteractionHand.MAIN_HAND, result.remainingHand());
+
+                if (!result.returnedItem().isEmpty()) {
+                    if (!player.getInventory().add(result.returnedItem())) {
+                        player.drop(result.returnedItem(), false);
+                    }
+                }
                 playSound(level, pos);
-                player.setItemInHand(InteractionHand.MAIN_HAND, toSet);
             }
+
             return InteractionResult.CONSUME;
         }
 
@@ -88,10 +97,30 @@ public abstract class AbstractPedestalBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS; // Cancels even block placements or any type of item executions
     }
 
-    // TODO: Drop items if empty
+    protected Component getTooltip() {
+        return Component.translatable("tooltip.lunarmon-horizons.pedestal_base");
+    }
+
+    protected boolean dropsInventoryOnBreak() {
+        return true;
+    }
+
     @Override
-    protected void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        super.onRemove(blockState, level, blockPos, blockState2, bl);
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
+                              @Nullable BlockEntity blockEntity, ItemStack tool) {
+
+        if (!level.isClientSide) {
+            if (blockEntity instanceof AbstractPedestalBlockEntity pedestal) {
+                ItemStack extracted = pedestal.extract(null);
+
+                if (!extracted.isEmpty()) {
+                    Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, extracted);
+                }
+            }
+            popResource(level, pos, new ItemStack(this));
+        }
+
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
     }
 
     private void playSound(Level level, BlockPos pos) {
@@ -105,9 +134,5 @@ public abstract class AbstractPedestalBlock extends BaseEntityBlock {
         );
 
         level.sendBlockUpdated(pos, level.getBlockState(pos), level.getBlockState(pos), Block.UPDATE_ALL);
-    }
-
-    protected Component getTooltip() {
-        return Component.translatable("tooltip.lunarmon-horizons.pedestal_base");
     }
 }

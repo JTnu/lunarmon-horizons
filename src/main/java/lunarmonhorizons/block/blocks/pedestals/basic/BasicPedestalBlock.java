@@ -16,4 +16,8 @@ public class BasicPedestalBlock extends AbstractPedestalBlock {
         return CODEC;
     }
 
+    @Override
+    protected boolean dropsInventoryOnBreak() {
+        return true;
+    }
 }

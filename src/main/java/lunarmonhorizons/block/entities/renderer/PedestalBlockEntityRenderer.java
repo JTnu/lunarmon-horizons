@@ -48,16 +48,20 @@ public class PedestalBlockEntityRenderer implements BlockEntityRenderer<Abstract
 
         poseStack.scale(0.45F, 0.45F, 0.45F);
 
+        MultiBufferSource.BufferSource cleanBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
+
         itemRenderer.renderStatic(
                 stack,
-                ItemDisplayContext.FIXED, // better than GROUND for displays
+                ItemDisplayContext.FIXED,
                 getLight(level, entity.getBlockPos()),
                 packedOverlay,
                 poseStack,
-                buffer,
+                cleanBuffer,
                 level,
                 1
         );
+
+        cleanBuffer.endBatch();
 
         poseStack.popPose();
     }
