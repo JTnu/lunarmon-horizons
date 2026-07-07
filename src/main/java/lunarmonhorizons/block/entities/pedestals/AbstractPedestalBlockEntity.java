@@ -67,6 +67,14 @@ public abstract class AbstractPedestalBlockEntity extends BlockEntity {
         return old;
     }
 
+    protected void clearPedestalItem() {
+
+        inventory.setItem(0, ItemStack.EMPTY);
+
+        setChanged();
+        sync();
+    }
+
     public boolean isEmpty() {
         return inventory.getItem(0).isEmpty();
     }

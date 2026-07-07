@@ -1,6 +1,5 @@
 package lunarmonhorizons.block.entities.pedestals.summoning;
 
-import lunarmonhorizons.LunarMonHorizons;
 import lunarmonhorizons.block.blocks.pedestals.summoning.SimpleSummoningPedestalBlock;
 import lunarmonhorizons.block.entities.ModBlockEntities;
 import lunarmonhorizons.block.entities.anchor.SpawningAnchorBlockEntity;
@@ -30,6 +29,10 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
     protected BlockPos anchorPos = new BlockPos(0, 0, 0);
     protected boolean spawnAtAnchor = false; // Mostly used when the anchor has been found
     protected int ticksSinceLast = 0;
+    protected boolean activated = false;
+    protected long reactivationTime = 0L;
+
+    private static final long COOLDOWN_TIME = 216000L; // 3 Hours
 
     public SimpleSummoningPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SPAWNING_PEDESTAL_BE, pos, state);
@@ -43,7 +46,7 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
     }
 
     private void updateSpawningAnchor(){
-        if (!(this.level instanceof ServerLevel) && !spawnAtAnchor) return;
+        if (!(this.level instanceof ServerLevel) || !spawnAtAnchor) return;
         int startingChunkX = (this.getBlockPos().getX() >> 4) - 1;
         int startingChunkY = (this.getBlockPos().getZ() >> 4) - 1;
         // Checks the 3x3 chunks in its vicinity
@@ -77,7 +80,18 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
     }
 
     public void tick(){
-        ticksSinceLast++;
+
+        if (level == null || level.isClientSide()) {
+            return;
+        }
+
+        if (activated &&
+                level.getGameTime() >= reactivationTime) {
+
+            activated = false;
+            clearPedestalItem();
+        }
+
         onTick();
     }
 
@@ -87,24 +101,35 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
         }
     }
 
-    // TODO: Add timed based reactivation mechanic
     /**
      * Only get called when it is successful
      */
     @Override
     protected void onItemChanged(ItemStack oldStack, ItemStack newStack, State state) {
         if (!(level instanceof ServerLevel)) return;
-        switch (state){
-            case INSERTED, SWAPPED -> {
-                ((SimpleSummoningPedestalBlock) this.getBlockState().getBlock()).summon(this);
+
+        if (state == State.INSERTED) {
+
+            if (activated) {
+                return;
             }
-            case EXTRACTED -> { } // Do nothing
+
+            activated = true;
+
+            reactivationTime =
+                    level.getGameTime() + COOLDOWN_TIME;
+
+            setChanged();
+
+            ((SimpleSummoningPedestalBlock)
+                    this.getBlockState().getBlock())
+                    .summon(this);
         }
     }
 
     @Override
     protected boolean canTakeItem(ItemStack stack, ServerPlayer player) {
-        return this.isEmpty(); // Example use case, can't take out the item again
+        return !activated;
     }
 
     @Override
@@ -112,6 +137,9 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
         super.loadAdditional(tag, registries);
         if (tag.contains("anchor")) this.anchorPos = BlockPos.of(tag.getLong("anchor"));
         if (tag.contains("spawn_at_anchor")) this.spawnAtAnchor = tag.getBoolean("spawn_at_anchor");
+
+        if (tag.contains("activated")) this.activated = tag.getBoolean("activated");
+        if (tag.contains("reactivation_time")) this.reactivationTime = tag.getLong("reactivation_time");
     }
 
     @Override
@@ -119,5 +147,8 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
         super.saveAdditional(tag, registries);
         tag.putLong("anchor", this.anchorPos.asLong());
         tag.putBoolean("spawn_at_anchor", this.spawnAtAnchor);
+
+        tag.putBoolean("activated", activated);
+        tag.putLong("reactivation_time", reactivationTime);
     }
 }
