@@ -45,6 +45,7 @@ public class ModItems {
     public static final Item PRISON_BOTTLE = registerSummoningItem("prison_bottle");
     public static final Item GUARDIANS_CREST = registerSummoningItem("guardians_crest");
     public static final Item HEROS_CREST = registerSummoningItem("heros_crest");
+    public static final Item STEAM_CORE = registerSummoningItem("steam_core");
 
     private static SummoningItem registerSummoningItem(String name){
         return registerSummoningItem(name, Component.translatable("tooltip.lunarmonhorizons." + name + ".shift"));

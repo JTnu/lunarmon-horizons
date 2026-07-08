@@ -51,6 +51,7 @@ public class ModItemGroups {
                 output.accept(ModItems.OBSIDIAN_SHARD);
                 output.accept(ModItems.PRISON_BOTTLE_FRAGMENT);
                 output.accept(ModItems.PRISON_BOTTLE);
+                output.accept(ModItems.STEAM_CORE);
             })
             .build();
 
