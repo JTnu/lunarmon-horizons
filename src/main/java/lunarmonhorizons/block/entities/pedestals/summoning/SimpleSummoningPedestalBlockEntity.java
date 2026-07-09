@@ -28,7 +28,6 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
 
     protected BlockPos anchorPos = new BlockPos(0, 0, 0);
     protected boolean spawnAtAnchor = false; // Mostly used when the anchor has been found
-    protected int ticksSinceLast = 0;
     protected boolean activated = false;
     protected long reactivationTime = 0L;
 
@@ -85,18 +84,22 @@ public class SimpleSummoningPedestalBlockEntity extends PredicatedPedestalBlockE
             return;
         }
 
-        if (activated &&
-                level.getGameTime() >= reactivationTime) {
-
-            activated = false;
-            clearPedestalItem();
-        }
-
         onTick();
     }
 
     protected void onTick() {
-        if (ticksSinceLast % 40 == 0 && (this.anchorPos == null || !this.spawnAtAnchor)) { // Checks every 2 seconds and the anchor is not yet found
+        Level level = this.level;
+        if (level == null) {
+            return;
+        }
+
+        if (activated && level.getGameTime() >= reactivationTime) {
+            activated = false;
+            clearPedestalItem();
+            setChanged();
+        }
+
+        if (!spawnAtAnchor && level.getGameTime() % 40L == 0L) {
             updateSpawningAnchor();
         }
     }
